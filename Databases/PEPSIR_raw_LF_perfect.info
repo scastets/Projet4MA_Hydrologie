@@ -1,0 +1,22 @@
+river: river name (str), source PEPSI data
+day: simulation day (int), source PEPSI data
+reach: reach index (int), source PEPSI data
+reach_length: length of the reach (int, m), source PEPSI data
+lon: longitude (float, deg), source PEPSI data
+lat: latitude (float, deg), source PEPSI data
+flowacc: flow accumulation (float, km2), i.e. size of the upstream watershed, source MERIT-Hydro
+sinuosity: sinuosity (float, -), source WorldDataBaseRivers (Frasson et al, 2019)
+meandwave: meandering wavelength (float, m), source WorldDataBaseRivers (Frasson et al, 2019)
+height: free surface height (float, m), source PEPSI data
+W: free surface top width (float, m), source PEPSI data
+A: cross-sectional flow area (float, m2), source PEPSI data
+S: free surface slope (float, m/m), source PEPSI data
+dA: cross-sectional flow area above A0 (float, m2), source PEPSI data
+K: Strickler value (float, m^1/3.s^-1), computed by inverting Manning equation with parameters Q, A0, dA, W and S from PEPSI data
+A0: unobserved cross-sectional flow area (float, m2), source PEPSI data
+Abar: mean cross-sectional flow area (float, m2), source PEPSI data
+alpha: alpha parameter for powerlaw K=alpha*h^beta (float, m^1/3.s^-1), computed using log-regression between K and A/W (~h)
+beta: beta parameter for powerlaw K=alpha*h^beta (float, -), computed using log-regression between K and A/W (~h)
+Fr: Froude number (float, -), source PEPSI data
+U: flow velocity (float, m/s), source PEPSI data
+Q: discharge (float, m3/s), source PEPSI data
