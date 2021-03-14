@@ -1,0 +1,41 @@
+site_no: site number (int), source HYDRoSWOT data
+station_name: station name (str), source HYDRoSWOT data
+river: River name (str) extracted from station_name, source HYDRoSWOT data
+stream type: Type of stream (str) extracted from station_name, source HYDRoSWOT data
+lon: longitude (float, deg), source HYDRoSWOT data
+lat: latitude (float, deg), source HYDRoSWOT data
+flowacc: flow accumulation (float, km2), i.e. size of the upstream watershed, source MERIT-Hydro
+stage: stage (float, m), source HYDRoSWOT data
+W: free surface top width (float, m), source HYDRoSWOT data
+dH: water depth above unobserved flow (float, m), source HYDRoSWOT data
+dA: cross-sectional flow area above A0 (float, m2), source HYDRoSWOT data
+U: flow velocity (float, m/s), source HYDRoSWOT data
+A0: minimal (unobserved) flow area (float, m2), source HYDRoSWOT data
+Abar: mean flow area (float, m2), source HYDRoSWOT data
+Amed: median flow area (float, m2), source HYDRoSWOT data
+Sdem: terrain slope (m/m) computed from MERIT Digital Elevation Model, source MERIT-Basins
+clay: percentage of clay in the floodplain (float, %), source ISRIC SoilGrids
+sand: percentage of sand in the floodplain (float, %), source ISRIC SoilGrids
+silt: percentage of sile in the floodplain (float, %), source ISRIC SoilGrids
+PA: mean annual precipitation (float, mm), source WORLDCLIM 1.4 Bio data
+TA: mean annual temperature (float, °C), source WORLDCLIM 1.4 Bio data
+LC1: Evergreen/Deciduous Needleleaf Trees (float, %), source Global 1-km Consensus Land Cover
+LC2: Evergreen Broadleaf Trees (float, %), source Global 1-km Consensus Land Cover
+LC3: Deciduous Broadleaf Trees (float, %), source Global 1-km Consensus Land Cover
+LC4: Mixed/Other Trees (float, %), source Global 1-km Consensus Land Cover
+LC5: Shrubs (float, %), source Global 1-km Consensus Land Cover
+LC6: Herbaceous Vegetation (float, %), source Global 1-km Consensus Land Cover
+LC7: Cultivated and Managed Vegetation (float, %), source Global 1-km Consensus Land Cover
+LC8: Regularly Flooded Vegetation (float, %), source Global 1-km Consensus Land Cover
+LC9: Urban/Built-up (float, %), source Global 1-km Consensus Land Cover
+LC10: Snow/Ice (float, %), source Global 1-km Consensus Land Cover
+LC11: Barren (float, %), source Global 1-km Consensus Land Cover
+LC12: Open Water (float, %), source Global 1-km Consensus Land Cover
+Q5_GSCD: 5-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q10_GSCD: 10-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q20_GSCD: 20-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+QMEAN_GSCD: mean discharge quantile (float, ??), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q80_GSCD: 80-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q90_GSCD: 90-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q95_GSCD: 95-th base streamflow (float, mm/d), source Global StreamFlow Characteristics Database (Beck, 2015)
+Q: discharge (float, m3/s), source HYDRoSWOT data
