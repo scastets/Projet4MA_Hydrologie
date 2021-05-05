@@ -1,0 +1,71 @@
+*** Séance 23/03 *** 
+
+- Plotter densité spatio temporelle 
+- Verifier la regression des alpha beta
+- Verifier nombre de points
+- Refaire run d'ANN et comparer courbes de convergence selon paquet de rivières (rivières entières ou juste points) et selon le splitting des classes
+- Couper à 300 de débit / regarder débit des rivières de moins de 80/90/100m de large
+- Et que ensuite, aller voire la prediction
+- LSTM 
+- Classification autre que sur le débit
+- Centraliser codes
+- Mettre sur svn
+
+*** Séance 9 30/03 ***
+
+- liflet pour carte USA
+- beta = 0 alpha = valeur pour 2 mesures 
+- 1 data pour 40 paramètres  
+- afficher nb parametre/ nb data 
+- revenir à 2 classes et reseau de neurones moins profond
+- 5 par 3
+- Hydrogramme
+- Metrique froude
+- Covariance A0 Q / A0 K 
+- LSTM
+- Rédaction à envoyer avant prochain RDV en anglais
+- Mettre notebook en annexe sans outputs
+ 
+
+*** Séance 10 : 7/04 14h30 ***
+
+- Code sur renater svn : OK
+- Gradient stochastique ADAM ??? 
+- LSTM commencer  
+- Putain d'erreur de consistance 
+- ANN sur les k-means
+- Faire k-means sans utiliser Q ?
+- A r donné plot erreur de consistance sur rivieres du set apprentissage (Q prédit par algo) (dans l'espace)
+ on verra donc la différence avec la physique, réseau de neurone fournit un état de stabilité sur la physique ? CERTIFIER LE RESEAU 
+pas besoin d'apprendre, on peut lire a posteriori la metrique 
+puis faire sur prediction
+plot (Q, Qprédit)+erreur constitance en parallèle
+
+- LSTM : comment trier dans l'ordre chronologique ? tri de chaque rivière dans l'ordre chronologique ? tri de tout le dataset en même temps ? 
+- Mikael : sélection d'une rivière mais LSTM sur plusieurs rivières en même temps possible
+
+
+A faire : 
+
+- Erreur consistance comme métrique
+- Faire sous-classes pour afficher plot en fonction des dics
+
+*** Séance 11 : 13/04 9h30 ***
+
+- ANN : prendre variable S => enlever lignes S < 10e-7
+- Regarder avec et sans S petits
+- Pepsi : S présent 
+- HydroSwot : Sdm / Sbar
+- Faire une grosse série temporelle / jour + reach 
+- Suivre exemple de la coccinnelle de la formation
+- Faire moyenne spatiale sur chaque rivière ( réunir les reach ) 
+- Réfléchir sur descripteurs + profondeur  
+- Penser au dropout pour éviter surapprentissage 
+- Devenir un dieu de Keras 
+- workflow
+- Multiple de 50 pour minibatch 
+- Batch de rivières pour avoir des chroniques
+- Méthode pour à partir d'une taille de batch => calcul du low-froude / erreur avec ANN (??)
+
+
+
