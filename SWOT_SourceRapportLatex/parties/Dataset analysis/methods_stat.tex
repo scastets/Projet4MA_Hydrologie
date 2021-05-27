@@ -1,0 +1,36 @@
+\subsection{Statistical methods}
+
+\subsubsection{Correlation matrix.}
+
+We seek to determine which variables are related. 
+
+The correlation is the relationship between two random quantitative variables which explains how they are linearly related. It is defined by :
+\begin{equation}
+    Cor(\underline{x},\underline{y}) = \frac{Cov(\underline{x},\underline{y})}{\sqrt{Var(\underline{x})Var(\underline{y})}}
+\end{equation}
+where \underline{x} and \underline{y} denote the samples of the two variables, $Cov$ the covariance between them, and $Var$ their respective variance. The correlation varies between $-1$ when the variables vary in strong opposite directions, and $1$ when they vary exactly in the same direction. Here, we use a correlation matrix to easily summarise all the correlations between all variables : one cell of the matrix represents the correlation between the row variable and the column one. Thus, the diagonal is full of $1$s, as it represents the correlation between a variable and itself.\newline
+
+\subsubsection{Principal Component Analysis.}
+
+The goal of  a Principal Component Analysis (PCA) (Wikistat, 2016 \cite{ACP}) is to reduce the large shape of our problem by gathering our variables within metavariables to analyse our data more easily. The first step consists in a normalization of the data because of the different scales (understand units) of our variables. Then, we compute linear combinations of our initial variables. One linear combination represents one principal component or direction. The aim is to find which direction maximises the amount of variance of the data, i.e. the direction that captures most information of the data. 
+
+Let $\Sigma$ be the covariance matrix associated to the normalized data. Computing the principal component involves determining the eigenvector $a_1$ associated to the largest eigenvalue of $\Sigma$ denoted as $\lambda_1$, i.e. to solve the following equation :
+\begin{equation}
+    \Sigma a_1 = \lambda_1 a_1
+\end{equation}
+Thus, we get the principal components by order of significance by ranking the eigenvectors according to the values of their associated eigenvalues. Then, we select the number of axes which is necessary to capture the majority of the information. A well-known rule is to keep the first $n$ components such as the sum of their variances reaches $80\%$ of the total variance.
+
+Finally, we interpret our PCA with two different types of graph. The first one is the loading plot: all the variables of the problem are displayed in the spans formed by each pair of principal components retained. The aim is to find how the initial variables are related with the principal components. The second plot is the score plot, which plots the individuals' coordinates in the the same spans as mentioned above. We then can observe clusters of individuals.
+
+\subsubsection{Clustering by K-means.}
+
+K-means is an unsupervised classification method to define clusters in a dataset. We first have to find the optimal number $k$ of clusters to give to the algorithm. Then, it works as follows.
+
+First, $k$ class centers, called centroids, are randomly initialized. Second, individuals are assigned to the class whose center is closest, according to the chosen distance metric. Here, we use the Euclidean metric. It is defined as follows, for a pair of samples $a$ and $b$ $\in \mathbb{R}^n$:
+\begin{equation}
+    dist_{euc}(a,b) = \sqrt{\sum^n_{i=1} (a_i - b_i)^2}
+\end{equation}
+
+Third, the centers of gravity of each class are computed. Finally, we repeat second and third instructions until the convergence of the algorithm.
+
+One advantage of the K-means algorithm is that we are certain to obtain a convergence of it. Nonetheless, we obtain different classes depending on the random initialization at the beginning. To overcome this problem, the algorithm will be run with different centroid seeds, and the final results will be the best output in terms of inertia.

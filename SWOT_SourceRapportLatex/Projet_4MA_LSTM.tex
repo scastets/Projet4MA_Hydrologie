@@ -1,0 +1,1709 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Projet\_4MA\_LSTM}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{projet-4ma---lstm}{%
+\section{Projet 4MA - LSTM}\label{projet-4ma---lstm}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Imports}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt} 
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{linregress}
+\PY{k+kn}{import} \PY{n+nn}{sklearn}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{decomposition} \PY{k+kn}{import} \PY{n}{PCA}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k+kn}{import} \PY{n}{StandardScaler} \PY{p}{,} \PY{n}{scale}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{cluster}\PY{n+nn}{.}\PY{n+nn}{hierarchy} \PY{k+kn}{import} \PY{n}{dendrogram}\PY{p}{,} \PY{n}{linkage}\PY{p}{,} \PY{n}{fcluster}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cluster} \PY{k+kn}{import} \PY{n}{KMeans}
+\PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{colors}
+\PY{k+kn}{import} \PY{n+nn}{pylab} \PY{k}{as} \PY{n+nn}{pyl}
+\PY{k+kn}{import} \PY{n+nn}{math}
+
+\PY{k+kn}{import} \PY{n+nn}{pywt}
+\PY{k+kn}{import} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{io} \PY{k}{as} \PY{n+nn}{sio}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{holoviews} \PY{k}{as} \PY{n+nn}{hv}
+\PY{k+kn}{import} \PY{n+nn}{param}
+\PY{k+kn}{import} \PY{n+nn}{panel} \PY{k}{as} \PY{n+nn}{pn}
+\PY{k+kn}{from} \PY{n+nn}{panel}\PY{n+nn}{.}\PY{n+nn}{pane} \PY{k+kn}{import} \PY{n}{LaTeX}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{callbacks} \PY{k+kn}{import} \PY{n}{TensorBoard}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{preprocessing}\PY{n+nn}{.}\PY{n+nn}{sequence} \PY{k+kn}{import} \PY{n}{TimeseriesGenerator}
+
+
+\PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k+kn}{import} \PY{n}{Image}
+\PY{k+kn}{from} \PY{n+nn}{io} \PY{k+kn}{import} \PY{n}{BytesIO}
+\PY{k+kn}{import} \PY{n+nn}{requests}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+\PY{k+kn}{from} \PY{n+nn}{ipywidgets} \PY{k+kn}{import} \PY{n}{interact}
+\PY{n}{hv}\PY{o}{.}\PY{n}{extension}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bokeh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{k+kn}{import} \PY{n+nn}{tensorflow}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow} \PY{k+kn}{import} \PY{n}{keras}
+\PY{c+c1}{\PYZsh{}from plot\PYZus{}keras\PYZus{}history import plot\PYZus{}history}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{from} \PY{n+nn}{keras} \PY{k+kn}{import} \PY{n}{backend} \PY{k}{as} \PY{n}{K}
+\PY{k+kn}{import} \PY{n+nn}{tensorflow\PYZus{}probability} \PY{k}{as} \PY{n+nn}{tfp}
+
+\PY{n}{scaler} \PY{o}{=} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    
+    
+    
+    
+    
+    \hypertarget{partie-0-pruxe9paration-des-donnuxe9es}{%
+\subsection{Partie 0 : Préparation des
+données}\label{partie-0-pruxe9paration-des-donnuxe9es}}
+
+\emph{Faire un notebook pour cette partie ? Puis l'import dans les gros
+notebooks ? ( comme mikael )}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Chargement du dataset}
+\PY{n}{data\PYZus{}pepsi} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../databases/PEPSIR\PYZus{}raw\PYZus{}LF\PYZus{}perfect.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{;}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pepsi \PYZhy{}\PYZgt{} Missing Data : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{  Shape is : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n}{display}\PY{p}{(}\PY{n}{data\PYZus{}pepsi}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Pepsi -> Missing Data :  0   Shape is :  (55525, 21)
+    \end{Verbatim}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+               river  day  reach        lon        lat       flowacc  \textbackslash{}
+0        Connecticut    1      1 -72.611298  41.959000  25078.300781   
+1        Connecticut    2      1 -72.611298  41.959000  25078.300781   
+2        Connecticut    3      1 -72.611298  41.959000  25078.300781   
+3        Connecticut    4      1 -72.611298  41.959000  25078.300781   
+4        Connecticut    5      1 -72.611298  41.959000  25078.300781   
+{\ldots}              {\ldots}  {\ldots}    {\ldots}        {\ldots}        {\ldots}           {\ldots}   
+55520  SeineUpstream  361      9   2.451205  48.638222  28558.599609   
+55521  SeineUpstream  362      9   2.451205  48.638222  28558.599609   
+55522  SeineUpstream  363      9   2.451205  48.638222  28558.599609   
+55523  SeineUpstream  364      9   2.451205  48.638222  28558.599609   
+55524  SeineUpstream  365      9   2.451205  48.638222  28558.599609   
+
+       sinuosity    meandwave     height           W  {\ldots}         S  \textbackslash{}
+0       1.079975  1260.057129  26.306667  475.403333  {\ldots}  0.001768   
+1       1.079975  1260.057129  25.960000  443.906667  {\ldots}  0.001606   
+2       1.079975  1260.057129  25.810000  427.006667  {\ldots}  0.001539   
+3       1.079975  1260.057129  25.776667  423.786667  {\ldots}  0.001521   
+4       1.079975  1260.057129  25.616667  406.016667  {\ldots}  0.001469   
+{\ldots}          {\ldots}          {\ldots}        {\ldots}         {\ldots}  {\ldots}       {\ldots}   
+55520   1.044278  1103.217163  20.508551  173.470158  {\ldots}  0.000002   
+55521   1.044278  1103.217163  20.510143  173.471174  {\ldots}  0.000002   
+55522   1.044278  1103.217163  20.507524  173.469537  {\ldots}  0.000002   
+55523   1.044278  1103.217163  20.492360  173.459942  {\ldots}  0.000002   
+55524   1.044278  1103.217163  20.490997  173.459116  {\ldots}  0.000002   
+
+               dA          K          A0        Abar      alpha      beta  \textbackslash{}
+0      541.200050  12.808404  515.403333  821.447783  10.945707  0.225114   
+1      381.870528  12.586607  515.403333  821.447783  10.945707  0.225114   
+2      316.600322  12.513133  515.403333  821.447783  10.945707  0.225114   
+3      302.424628  12.499948  515.403333  821.447783  10.945707  0.225114   
+4      236.099400  12.410309  515.403333  821.447783  10.945707  0.225114   
+{\ldots}           {\ldots}        {\ldots}         {\ldots}         {\ldots}        {\ldots}       {\ldots}   
+55520    4.102394  42.048967  689.775741  767.410443  44.198912 -0.035970   
+55521    4.378577  42.048380  689.775741  767.410443  44.198912 -0.035970   
+55522    3.924359  42.049354  689.775741  767.410443  44.198912 -0.035970   
+55523    1.293915  42.055019  689.775741  767.410443  44.198912 -0.035970   
+55524    1.057462  42.055532  689.775741  767.410443  44.198912 -0.035970   
+
+             Fr         U           Q  
+0      0.217360  0.965178  922.263333  
+1      0.165027  0.704906  581.980000  
+2      0.141175  0.595232  460.586667  
+3      0.135371  0.569428  435.253333  
+4      0.113845  0.471288  334.273333  
+{\ldots}         {\ldots}       {\ldots}         {\ldots}  
+55520  0.022344  0.139968   97.120914  
+55521  0.022184  0.138993   96.482473  
+55522  0.021925  0.137326   95.263317  
+55523  0.022004  0.137560   95.063656  
+55524  0.021615  0.135108   93.336927  
+
+[55525 rows x 21 columns]
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Modification des valeurs de alpha et beta ( avant suppression de Q et W) \PYZsh{}\PYZsh{}\PYZsh{} }
+
+
+\PY{c+c1}{\PYZsh{}calculate new alpha\PYZam{}beta}
+\PY{n}{A} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{B} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{cont} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{n}{data\PYZus{}pepsi\PYZus{}aux} \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{river}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{as\PYZus{}index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{rivers} \PY{o}{=} \PY{n}{data\PYZus{}pepsi\PYZus{}aux}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{river}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{river}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)} \PY{p}{:}
+    \PY{n}{river\PYZus{}data} \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{river}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{==} \PY{n}{i}\PY{p}{]}
+    \PY{n}{aux} \PY{o}{=} \PY{n}{river\PYZus{}data}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reach}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{as\PYZus{}index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+    \PY{n}{reachs} \PY{o}{=} \PY{n}{aux}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{reach}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{reachs}\PY{p}{:}
+        \PY{n}{reach\PYZus{}data} \PY{o}{=} \PY{n}{river\PYZus{}data}\PY{p}{[}\PY{n}{river\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reach}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{==} \PY{n}{j}\PY{p}{]}
+        
+        \PY{n}{A0r} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{dArp} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{Qrp} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{Srp} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{Wrp} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{W}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{Zrp} \PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{height}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{n}{Zr0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{Zrp}\PY{p}{)}
+        \PY{n}{Wr0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{Wrp}\PY{p}{)}
+        \PY{n}{c1rp} \PY{o}{=} \PY{n}{Wrp}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{2.}\PY{o}{/}\PY{l+m+mf}{5.}\PY{p}{)} \PY{o}{*} \PY{n}{Srp}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{3.}\PY{o}{/}\PY{l+m+mf}{10.}\PY{p}{)}
+        \PY{n}{c2rp} \PY{o}{=} \PY{n}{c1rp} \PY{o}{*} \PY{n}{dArp}
+        \PY{n}{c3rp} \PY{o}{=} \PY{p}{(}\PY{n}{Zrp} \PY{o}{\PYZhy{}} \PY{n}{Zr0}\PY{p}{)} \PY{c+c1}{\PYZsh{}à revoir potentiellement, cf. Kévin}
+        \PY{n}{c4r} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{/} \PY{n}{Wr0}
+        
+        \PY{n}{x} \PY{o}{=} \PY{n}{c4r} \PY{o}{*} \PY{n}{A0r} \PY{o}{+} \PY{n}{c3rp}
+        \PY{n}{y} \PY{o}{=} \PY{n}{Qrp}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{3.}\PY{o}{/}\PY{l+m+mf}{5.}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{c1rp} \PY{o}{*} \PY{n}{A0r} \PY{o}{+} \PY{n}{c2rp}\PY{p}{)}
+        \PY{n}{res} \PY{o}{=} \PY{n}{linregress}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{a} \PY{o}{=} \PY{n}{res}\PY{o}{.}\PY{n}{slope}
+        \PY{n}{b} \PY{o}{=} \PY{n}{res}\PY{o}{.}\PY{n}{intercept}
+        \PY{n}{alpha} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{b}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{5.}\PY{o}{/}\PY{l+m+mf}{3.}\PY{p}{)}
+        \PY{n}{beta} \PY{o}{=} \PY{n}{a} \PY{o}{*} \PY{l+m+mf}{5.} \PY{o}{/} \PY{l+m+mf}{3.}
+        
+        \PY{k}{if} \PY{n}{math}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{alpha}\PY{p}{)} \PY{o+ow}{or} \PY{n}{math}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{beta}\PY{p}{)}\PY{p}{:}
+                \PY{n}{alpha} \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{alpha}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{cont}\PY{p}{]}
+                \PY{n}{beta}  \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{beta}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{cont}\PY{p}{]}
+                
+         
+        \PY{n}{A}\PY{p}{[}\PY{n}{cont} \PY{p}{:}\PY{n}{cont} \PY{o}{+} \PY{n}{reach\PYZus{}data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{alpha}
+        \PY{n}{B}\PY{p}{[}\PY{n}{cont} \PY{p}{:}\PY{n}{cont} \PY{o}{+} \PY{n}{reach\PYZus{}data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{beta}
+        \PY{n}{cont} \PY{o}{+}\PY{o}{=} \PY{n}{reach\PYZus{}data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+   
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}function\_base.py:2474:
+RuntimeWarning: invalid value encountered in subtract
+  X -= avg[:, None]
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}add new alpha\PYZam{}beta to the original dataframe}
+\PY{n}{data\PYZus{}pepsi}\PY{o}{=}\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{alpha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{alpha}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{A}\PY{p}{)}
+\PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{beta}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{B}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Suppression des débits \PYZgt{} 100 et W \PYZlt{} 80}
+\PY{n}{data\PYZus{}pepsi} \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mi}{100}\PY{p}{]}
+\PY{n}{data\PYZus{}pepsi} \PY{o}{=} \PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{data\PYZus{}pepsi}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{W}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}} \PY{l+m+mi}{80}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{river\PYZus{}means\PYZus{}pepsi}\PY{o}{=}\PY{n}{data\PYZus{}pepsi}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{river}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{as\PYZus{}index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{suxe9rie-temporelle-avec-moyenne-sur-les-reach}{%
+\subsubsection{Série temporelle avec moyenne sur les
+reach}\label{suxe9rie-temporelle-avec-moyenne-sur-les-reach}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data\PYZus{}appr} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data\PYZus{}pepsi}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} for river\PYZus{}name in data\PYZus{}pepsi.river.unique():}
+    
+\PY{c+c1}{\PYZsh{}     data\PYZus{}temp = data\PYZus{}pepsi[data\PYZus{}pepsi.river.isin([river\PYZus{}name])].copy()}
+\PY{c+c1}{\PYZsh{}     \PYZsh{}print(\PYZdq{}Shape data\PYZus{}temp for \PYZdq{}, river\PYZus{}name ,\PYZdq{} : \PYZdq{} ,data\PYZus{}temp.shape)}
+    
+    
+\PY{c+c1}{\PYZsh{}     data\PYZus{}mean\PYZus{}temp = data\PYZus{}temp.groupby(\PYZdq{}day\PYZdq{}, as\PYZus{}index=False).mean().copy()}
+\PY{c+c1}{\PYZsh{}     data\PYZus{}mean\PYZus{}temp.insert(0,\PYZsq{}river\PYZsq{}, river\PYZus{}name)}
+    
+\PY{c+c1}{\PYZsh{}     \PYZsh{}print(\PYZdq{} =\PYZgt{} Shape data\PYZus{}mean : \PYZdq{} , data\PYZus{}mean\PYZus{}temp.shape)}
+    
+\PY{c+c1}{\PYZsh{}     data\PYZus{}appr = data\PYZus{}appr.append(data\PYZus{}mean\PYZus{}temp, ignore\PYZus{}index=True).drop(\PYZsq{}reach\PYZsq{},axis=1) }
+  
+\PY{n}{data\PYZus{}appr} \PY{o}{=} \PY{n}{data\PYZus{}appr}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{river}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{data\PYZus{}appr} \PY{o}{=} \PY{n}{data\PYZus{}appr}\PY{p}{[}\PY{n}{data\PYZus{}appr}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reach}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{==}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{c+c1}{\PYZsh{}print(\PYZdq{}Shape après moyenne sur chaque reach : \PYZdq{} , data\PYZus{}appr.shape)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{data\PYZus{}appr}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{:} 
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}  \PY{p}{(}\PY{n}{data\PYZus{}appr}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{day}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Connecticut  :  206
+Cumberland  :  145
+GaronneDownstream  :  347
+GaronneUpstream  :  243
+Kanawha  :  162
+MississippiDownstream  :  162
+Ohio  :  220
+Po  :  367
+SacramentoDownstream  :  154
+SacramentoUpstream  :  305
+Wabash  :  162
+IowaRiver  :  159
+Jamuna  :  250
+Kushiyara  :  347
+MissouriDownstream  :  595
+MissouriMidsection  :  595
+MissouriUpstream  :  595
+OhioSection1  :  220
+OhioSection2  :  220
+OhioSection3  :  220
+OhioSection4  :  220
+OhioSection5  :  220
+OhioSection7  :  220
+OhioSection8  :  220
+Padma  :  363
+SeineDownstream  :  365
+    \end{Verbatim}
+
+    \hypertarget{suxe9lection-dune-riviuxe8re-pour-le-lstm}{%
+\subsubsection{Sélection d'une rivière pour le
+LSTM}\label{suxe9lection-dune-riviuxe8re-pour-le-lstm}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{river\PYZus{}name} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MissouriDownstream}\PY{l+s+s2}{\PYZdq{}} 
+
+\PY{n}{data\PYZus{}river} \PY{o}{=} \PY{n}{data\PYZus{}appr}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{[}\PY{n}{river\PYZus{}name}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}data\PYZus{}river.sort\PYZus{}values([\PYZsq{}day\PYZsq{}],  inplace=True) \PYZsh{} si besoin de trier dans l\PYZsq{}ordre chronologique}
+\PY{n}{data\PYZus{}river}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ Shape : }\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{data\PYZus{}river}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ Shape :  (595, 20)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{linestyle} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{1st day value}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Days}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q (m3/s)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{450}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{pt\PYZus{}cont}\PY{p}{(}\PY{n}{data}\PY{p}{,}\PY{n}{deb}\PY{p}{,}\PY{n}{fin}\PY{p}{,}\PY{n}{tol} \PY{o}{=} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{mini} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{deb}\PY{p}{:}\PY{n}{fin}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{k}{while} \PY{n}{tol} \PY{o}{\PYZlt{}} \PY{n}{mini}\PY{p}{:} 
+        \PY{k}{if} \PY{n}{deb} \PY{o}{\PYZgt{}} \PY{l+m+mi}{200}\PY{p}{:} 
+            \PY{n}{deb} \PY{o}{\PYZhy{}}\PY{o}{=}\PY{l+m+mi}{5}
+            \PY{n}{fin} \PY{o}{+}\PY{o}{=}\PY{l+m+mi}{5}
+            \PY{n}{mini} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{deb}\PY{p}{:}\PY{n}{fin}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{deb} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{argmin}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{deb}\PY{p}{:}\PY{n}{fin}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} On réduit le data set à une année environ avec continuité entre 1er jour et dernier}
+\PY{n}{data\PYZus{}river} \PY{o}{=} \PY{n}{data\PYZus{}river}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{pt\PYZus{}cont}\PY{p}{(}\PY{n}{data\PYZus{}river}\PY{p}{,}\PY{l+m+mi}{350}\PY{p}{,}\PY{l+m+mi}{370}\PY{p}{)}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ New shape : }\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{data\PYZus{}river}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ New shape :  (368, 20)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{c} \PY{o}{=} \PY{n}{data\PYZus{}river}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
+\PY{n}{c}\PY{o}{.}\PY{n}{style}\PY{o}{.}\PY{n}{background\PYZus{}gradient}\PY{p}{(}\PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coolwarm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}io\textbackslash{}formats\textbackslash{}style.py:1126:
+RuntimeWarning: All-NaN slice encountered
+  smin = np.nanmin(s.to\_numpy()) if vmin is None else vmin
+C:\textbackslash{}Users\textbackslash{}sbcas\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}io\textbackslash{}formats\textbackslash{}style.py:1127:
+RuntimeWarning: All-NaN slice encountered
+  smax = np.nanmax(s.to\_numpy()) if vmax is None else vmax
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<pandas.io.formats.style.Styler at 0x206efe40880>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} On périodise le dataset }
+\PY{n}{nb\PYZus{}p} \PY{o}{=} \PY{l+m+mi}{5}
+\PY{n}{data\PYZus{}riverP} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{data\PYZus{}river}\PY{p}{]}\PY{o}{*}\PY{n}{nb\PYZus{}p}\PY{p}{,} \PY{n}{ignore\PYZus{}index} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{New shape :}\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+New shape : (1840, 20)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   day  reach        lon        lat      flowacc  sinuosity   meandwave  \textbackslash{}
+0    1      1 -95.518982  40.248444  1060505.625   1.039897  4400.90918
+1    2      1 -95.518982  40.248444  1060505.625   1.039897  4400.90918
+2    3      1 -95.518982  40.248444  1060505.625   1.039897  4400.90918
+3    4      1 -95.518982  40.248444  1060505.625   1.039897  4400.90918
+4    5      1 -95.518982  40.248444  1060505.625   1.039897  4400.90918
+
+       height           W           A         S          dA          K  \textbackslash{}
+0  277.899571  238.263953  844.656835  0.000165  463.053815  35.517881
+1  277.993541  239.284541  867.117424  0.000166  485.499500  35.328601
+2  278.150112  240.322576  904.689635  0.000168  523.051743  35.002834
+3  278.241565  240.796112  926.697300  0.000167  545.051648  34.815479
+4  278.315482  241.151571  944.512547  0.000167  562.864101  34.667045
+
+           A0        Abar        Fr         U            Q      alpha  \textbackslash{}
+0  381.595718  879.243082  0.166838  0.983876   831.037565  24.163295
+1  381.595718  879.243082  0.168188  1.002793   869.539012  24.163295
+2  381.595718  879.243082  0.170537  1.036347   937.572182  24.163295
+3  381.595718  879.243082  0.170908  1.050127   973.150229  24.163295
+4  381.595718  879.243082  0.171548  1.063357  1004.354294  24.163295
+
+       beta
+0  0.222081
+1  0.222081
+2  0.222081
+3  0.222081
+4  0.222081
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{60}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{columns\PYZus{}used} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{day}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{river}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{reach}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{W}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{to\PYZus{}drop} \PY{o}{=} \PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{difference}\PY{p}{(}\PY{n}{columns\PYZus{}used}\PY{p}{)}
+\PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{drop}\PY{p}{(} \PY{n}{to\PYZus{}drop}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} New Data}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ New shape : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ New shape :  (1840, 6)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{60}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   day  reach           W         S          dA            Q
+0    1      1  238.263953  0.000165  463.053815   831.037565
+1    2      1  239.284541  0.000166  485.499500   869.539012
+2    3      1  240.322576  0.000168  523.051743   937.572182
+3    4      1  240.796112  0.000167  545.051648   973.150229
+4    5      1  241.151571  0.000167  562.864101  1004.354294
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{affichage-en-fonction-des-jours}{%
+\subsubsection{Affichage en fonction des
+jours}\label{affichage-en-fonction-des-jours}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{61}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data\PYZus{}riverP}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{W}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{1500}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{subplots}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{14}\PY{p}{,}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{63}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data\PYZus{}riverP}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{1500}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} plt.axhline(data\PYZus{}river[\PYZdq{}Q\PYZdq{}][0],linestyle = \PYZdq{}\PYZhy{}\PYZhy{}\PYZdq{},color=\PYZsq{}red\PYZsq{},label = \PYZdq{}1st day value\PYZdq{})}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Days}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q (m3/s)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{partie-1-apprentissage}{%
+\subsection{Partie 1 : Apprentissage}\label{partie-1-apprentissage}}
+
+Sélectionner une seule rivière !
+
+\hypertarget{paramuxe8tres}{%
+\subsubsection{1 - Paramètres}\label{paramuxe8tres}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{64}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{scale}            \PY{o}{=} \PY{l+m+mi}{1}        \PY{c+c1}{\PYZsh{} Percentage of dataset to be used (1=all)}
+\PY{n}{train\PYZus{}prop}       \PY{o}{=} \PY{l+m+mf}{0.8}     \PY{c+c1}{\PYZsh{} Percentage for train (the rest being for the test)}
+\PY{n}{sequence\PYZus{}len}     \PY{o}{=} \PY{l+m+mi}{16}  
+\PY{n}{batch\PYZus{}size}       \PY{o}{=} \PY{l+m+mi}{16}
+
+\PY{n}{features}         \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{W}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{features\PYZus{}len}     \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{features}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{pruxe9paration-des-uxe9chantillons}{%
+\subsubsection{2 - Préparation des
+échantillons}\label{pruxe9paration-des-uxe9chantillons}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{65}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Train / Test }
+
+\PY{n}{train\PYZus{}len}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{train\PYZus{}prop}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{data\PYZus{}riverP}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{dataset\PYZus{}train} \PY{o}{=} \PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{loc}\PY{p}{[} \PY{p}{:}\PY{n}{train\PYZus{}len}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{features} \PY{p}{]}
+\PY{n}{dataset\PYZus{}test}  \PY{o}{=} \PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{train\PYZus{}len}\PY{p}{:}\PY{p}{,}    \PY{n}{features} \PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} x\PYZus{}train / y\PYZus{}train }
+
+\PY{n}{x\PYZus{}train} \PY{o}{=} \PY{n}{dataset\PYZus{}train}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{y\PYZus{}train}  \PY{o}{=} \PY{n}{dataset\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} 
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} x\PYZus{}test / y\PYZus{}test }
+
+\PY{n}{x\PYZus{}test} \PY{o}{=} \PY{n}{dataset\PYZus{}test}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{type}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{)}\PY{p}{)}
+\PY{n}{y\PYZus{}test}  \PY{o}{=} \PY{n}{dataset\PYZus{}test}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} 
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{type}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Normalize }
+
+\PY{n}{mean} \PY{o}{=} \PY{n}{x\PYZus{}train}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{std}  \PY{o}{=} \PY{n}{x\PYZus{}train}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{x\PYZus{}train}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+    \PY{k}{if} \PY{n}{std}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{!=}\PY{l+m+mi}{0}\PY{p}{:}
+       
+        \PY{n}{x\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{x\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{n}{std}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+        \PY{n}{x\PYZus{}test}\PY{p}{[}\PY{n}{i}\PY{p}{]}  \PY{o}{=} \PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{[}\PY{n}{i}\PY{p}{]}  \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{n}{std} \PY{p}{[}\PY{n}{i}\PY{p}{]}
+       
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Dataset       : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{data\PYZus{}riverP}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Train dataset : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{dataset\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test  dataset : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{dataset\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+<class 'pandas.core.series.Series'>
+Dataset       :  (1840, 6)
+Train dataset :  (1472, 4)
+Test  dataset :  (368, 4)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{66}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{data-generator}{%
+\subsubsection{3 - Data Generator}\label{data-generator}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{67}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Train generator}
+\PY{n}{train\PYZus{}generator} \PY{o}{=} \PY{n}{TimeseriesGenerator}\PY{p}{(}\PY{n}{x\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{length}\PY{o}{=}\PY{n}{sequence\PYZus{}len}\PY{p}{,}  \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{n}{batch\PYZus{}size}\PY{p}{)}
+\PY{n}{test\PYZus{}generator}  \PY{o}{=} \PY{n}{TimeseriesGenerator}\PY{p}{(}\PY{n}{x\PYZus{}test} \PY{p}{,} \PY{n}{y\PYZus{}test} \PY{p}{,} \PY{n}{length}\PY{o}{=}\PY{n}{sequence\PYZus{}len}\PY{p}{,}  \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{n}{batch\PYZus{}size}\PY{p}{)}
+
+
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Echantillons }
+\PY{n}{train\PYZus{}x} \PY{p}{,} \PY{n}{train\PYZus{}y} \PY{o}{=} \PY{n}{train\PYZus{}generator}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{test\PYZus{}x}  \PY{p}{,} \PY{n}{test\PYZus{}y}  \PY{o}{=} \PY{n}{test\PYZus{}generator}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} About}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nombre de train batchs disponibles : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}generator}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch x shape : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch y shape : }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Nombre de train batchs disponibles :  91
+batch x shape :  (16, 16, 3)
+batch y shape :  (16,)
+    \end{Verbatim}
+
+    \hypertarget{cruxe9ation-du-moduxe8le}{%
+\subsubsection{4 - Création du modèle}\label{cruxe9ation-du-moduxe8le}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{86}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{keras}\PY{o}{.}\PY{n}{models}\PY{o}{.}\PY{n}{Sequential}\PY{p}{(}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(} \PY{n}{keras}\PY{o}{.}\PY{n}{layers}\PY{o}{.}\PY{n}{InputLayer}\PY{p}{(}\PY{n}{input\PYZus{}shape}\PY{o}{=}\PY{p}{(}\PY{n}{sequence\PYZus{}len}\PY{p}{,} \PY{n}{features\PYZus{}len}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(} \PY{n}{keras}\PY{o}{.}\PY{n}{layers}\PY{o}{.}\PY{n}{LSTM}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{relu}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(} \PY{n}{keras}\PY{o}{.}\PY{n}{layers}\PY{o}{.}\PY{n}{Dense}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)} \PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Model: "sequential\_2"
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Layer (type)                 Output Shape              Param \#
+=================================================================
+lstm\_2 (LSTM)                (None, 10)                560
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+dense\_2 (Dense)              (None, 1)                 11
+=================================================================
+Total params: 571
+Trainable params: 571
+Non-trainable params: 0
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{87}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop = keras.models.Sequential()}
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.add( keras.layers.InputLayer(input\PYZus{}shape=(sequence\PYZus{}len, features\PYZus{}len\PYZhy{}1)) )}
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.add( keras.layers.LSTM(10, activation=\PYZsq{}relu\PYZsq{}) )}
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.add( keras.layers.Dropout(0.20))}
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.add( keras.layers.Dense(1) )}
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.summary()}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{metrics}{%
+\subsubsection{Metrics}\label{metrics}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{88}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{nRMSE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}pred} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{NSE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{l+m+mi}{1}\PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{o}{\PYZhy{}}\PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{R2}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,}\PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{tfp}\PY{o}{.}\PY{n}{stats}\PY{o}{.}\PY{n}{correlation}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{KGE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,}\PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{n}{beta} \PY{o}{=} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{o}{/}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}
+    \PY{n}{alpha} \PY{o}{=} \PY{n}{K}\PY{o}{.}\PY{n}{var}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{o}{/}\PY{n}{K}\PY{o}{.}\PY{n}{var}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}
+    \PY{n}{r2} \PY{o}{=} \PY{n}{R2}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,}\PY{n}{y\PYZus{}pred}\PY{p}{)}
+    \PY{n}{kge} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{beta}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{+} \PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{alpha}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{r2}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{kge}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{compilation}{%
+\subsubsection{5 - Compilation}\label{compilation}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{89}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+              \PY{n}{loss}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+              \PY{n}{metrics}   \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mae}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{nRMSE}\PY{p}{]} \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} model\PYZus{}drop.compile(optimizer=\PYZsq{}adam\PYZsq{}, }
+\PY{c+c1}{\PYZsh{}               loss=\PYZsq{}mse\PYZsq{}, }
+\PY{c+c1}{\PYZsh{}               metrics   = [\PYZsq{}mae\PYZsq{}] )}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{fit}{%
+\subsubsection{6 - Fit}\label{fit}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{91}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{epochs} \PY{o}{=} \PY{l+m+mi}{10}
+
+\PY{n}{history}\PY{o}{=}\PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}generator}\PY{p}{,} 
+                  \PY{n}{epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{,} 
+                  \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
+                  \PY{n}{validation\PYZus{}data} \PY{o}{=} \PY{n}{test\PYZus{}generator}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch 1/10
+91/91 [==============================] - 2s 7ms/step - loss: 1208541.4062 - mae:
+968.2951 - mse: 1208541.4062 - nRMSE: 0.9997 - val\_loss: 1209320.7500 - val\_mae:
+977.8007 - val\_mse: 1209320.7500 - val\_nRMSE: 0.9899
+Epoch 2/10
+91/91 [==============================] - 0s 4ms/step - loss: 912700.8030 - mae:
+836.7475 - mse: 912700.8030 - nRMSE: 0.8864 - val\_loss: 768188.0625 - val\_mae:
+686.6945 - val\_mse: 768188.0625 - val\_nRMSE: 0.6493
+Epoch 3/10
+91/91 [==============================] - 0s 4ms/step - loss: 638862.4868 - mae:
+643.1532 - mse: 638862.4868 - nRMSE: 0.6220 - val\_loss: 410709.0000 - val\_mae:
+396.0421 - val\_mse: 410709.0000 - val\_nRMSE: 0.3894
+Epoch 4/10
+91/91 [==============================] - 0s 4ms/step - loss: 265438.5151 - mae:
+339.8506 - mse: 265438.5151 - nRMSE: 0.3315 - val\_loss: 178991.2969 - val\_mae:
+251.0068 - val\_mse: 178991.2969 - val\_nRMSE: 0.2219
+Epoch 5/10
+91/91 [==============================] - 0s 4ms/step - loss: 262029.5763 - mae:
+300.4823 - mse: 262029.5763 - nRMSE: 0.2443 - val\_loss: 148511.2656 - val\_mae:
+210.6030 - val\_mse: 148511.2656 - val\_nRMSE: 0.1826
+Epoch 6/10
+91/91 [==============================] - 0s 4ms/step - loss: 116092.4633 - mae:
+210.6296 - mse: 116092.4633 - nRMSE: 0.2207 - val\_loss: 186138.6719 - val\_mae:
+240.6959 - val\_mse: 186138.6719 - val\_nRMSE: 0.2128
+Epoch 7/10
+91/91 [==============================] - 0s 4ms/step - loss: 196414.7465 - mae:
+232.9332 - mse: 196414.7465 - nRMSE: 0.1925 - val\_loss: 175652.8594 - val\_mae:
+228.8173 - val\_mse: 175652.8594 - val\_nRMSE: 0.1993
+Epoch 8/10
+91/91 [==============================] - 0s 4ms/step - loss: 263756.7862 - mae:
+299.3617 - mse: 263756.7862 - nRMSE: 0.2350 - val\_loss: 176444.8906 - val\_mae:
+216.6348 - val\_mse: 176444.8906 - val\_nRMSE: 0.1805
+Epoch 9/10
+91/91 [==============================] - 0s 4ms/step - loss: 97267.6868 - mae:
+175.1991 - mse: 97267.6868 - nRMSE: 0.1666 - val\_loss: 174390.1094 - val\_mae:
+259.4360 - val\_mse: 174390.1094 - val\_nRMSE: 0.2400
+Epoch 10/10
+91/91 [==============================] - 0s 4ms/step - loss: 197382.3880 - mae:
+261.0593 - mse: 197382.3880 - nRMSE: 0.2236 - val\_loss: 157462.6094 - val\_mae:
+215.7477 - val\_mse: 157462.6094 - val\_nRMSE: 0.1875
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{92}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} epochs = 10}
+
+\PY{c+c1}{\PYZsh{} history\PYZus{}drop=model\PYZus{}drop.fit(train\PYZus{}generator, }
+\PY{c+c1}{\PYZsh{}                   epochs=epochs, }
+\PY{c+c1}{\PYZsh{}                   verbose=1,}
+\PY{c+c1}{\PYZsh{}                   validation\PYZus{}data = test\PYZus{}generator)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{plot-metrics}{%
+\subsubsection{7 - Plot Metrics}\label{plot-metrics}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{93}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{hist} \PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{history}\PY{o}{.}\PY{n}{history}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} hist\PYZus{}drop =pd.DataFrame(data=history\PYZus{}drop.history)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{94}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{hist}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mae}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}or}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{l+m+mf}{0.20}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{)}\PY{p}{,}\PY{n}{linestyle} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}} \PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{20}\PY{l+s+si}{\PYZpc{} e}\PY{l+s+s2}{rror}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mae (m3/s)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Epochs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{hist}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}or}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Epochs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{hist}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nRMSE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}or}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nRMSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Epochs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{95}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} plt.figure(3)}
+\PY{c+c1}{\PYZsh{} plt.plot(hist[\PYZsq{}R2\PYZsq{}],\PYZsq{}\PYZhy{}or\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.title(\PYZdq{}R2 sans dropout\PYZdq{})}
+\PY{c+c1}{\PYZsh{} plt.legend()}
+\PY{c+c1}{\PYZsh{} plt.show()}
+
+\PY{c+c1}{\PYZsh{} plt.figure(2)}
+\PY{c+c1}{\PYZsh{} plt.plot(hist[\PYZsq{}KGE\PYZsq{}],\PYZsq{}\PYZhy{}or\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.title(\PYZdq{}KGE sans dropout\PYZdq{})}
+\PY{c+c1}{\PYZsh{} plt.legend()}
+\PY{c+c1}{\PYZsh{} plt.show()}
+
+\PY{c+c1}{\PYZsh{} plt.figure(2)}
+\PY{c+c1}{\PYZsh{} plt.plot(hist[\PYZsq{}NSE\PYZsq{}],\PYZsq{}\PYZhy{}or\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.title(\PYZdq{}NSE sans dropout\PYZdq{})}
+\PY{c+c1}{\PYZsh{} plt.legend()}
+\PY{c+c1}{\PYZsh{} plt.show()}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{96}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} plt.figure(1)}
+\PY{c+c1}{\PYZsh{} plt.plot(hist\PYZus{}drop[\PYZsq{}mae\PYZsq{}],\PYZsq{}\PYZhy{}or\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.axhline(0.20*np.mean(y\PYZus{}train),linestyle = \PYZsq{}\PYZhy{}\PYZhy{}\PYZsq{})}
+\PY{c+c1}{\PYZsh{} plt.title(\PYZdq{}MAE avec dropout\PYZdq{})}
+\PY{c+c1}{\PYZsh{} plt.show()}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{prediction-on-n-days}{%
+\subsubsection{8 - Prediction on n-days}\label{prediction-on-n-days}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{79}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{nRMSE\PYZus{}P}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}pred} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{80}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}prediction}\PY{p}{(}\PY{n}{xtest}\PY{p}{,} \PY{n}{ytest} \PY{p}{,}  \PY{n}{model}\PY{p}{,} \PY{n}{n\PYZus{}days}\PY{o}{=} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{plot} \PY{o}{=} \PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+
+    \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Initial sequence}
+    \PY{c+c1}{\PYZsh{}}
+    \PY{n}{s} \PY{o}{=} \PY{n}{sequence\PYZus{}len}
+    \PY{n}{y\PYZus{}pred}     \PY{o}{=} \PY{n}{ytest}\PY{p}{[}\PY{n}{s}\PY{p}{:}\PY{n}{s}\PY{o}{+}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+    \PY{n}{y\PYZus{}true}     \PY{o}{=} \PY{n}{ytest}\PY{p}{[}\PY{n}{s}\PY{p}{:}\PY{n}{s}\PY{o}{+}\PY{n}{sequence\PYZus{}len}\PY{o}{+}\PY{n}{n\PYZus{}days}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Iterate }
+    \PY{c+c1}{\PYZsh{}}
+    \PY{n}{y\PYZus{}pred} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}days}\PY{p}{)}\PY{p}{:}
+        \PY{n}{x\PYZus{}sequence} \PY{o}{=} \PY{n}{xtest}\PY{p}{[}\PY{n}{s}\PY{o}{+}\PY{n}{i}\PY{p}{:}\PY{n}{s}\PY{o}{+}\PY{n}{sequence\PYZus{}len}\PY{o}{+}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+        \PY{n}{aux\PYZus{}pred} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{x\PYZus{}sequence}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{n}{y\PYZus{}pred}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{aux\PYZus{}pred}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+    \PY{n}{y\PYZus{}true}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+    \PY{k}{if} \PY{n}{plot} \PY{p}{:}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,}\PY{n}{label} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Target}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{,}\PY{n}{label} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prediction}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prediction on }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{n\PYZus{}days}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  for }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{river\PYZus{}name}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nRMSE : }\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{nRMSE\PYZus{}P}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{k}{return} \PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{83}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Sur train}
+\PY{n}{true} \PY{p}{,} \PY{n}{pred} \PY{o}{=} \PY{n}{get\PYZus{}prediction}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{,}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{model}\PY{p}{,}\PY{l+m+mi}{340}\PY{p}{,} \PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_48_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red-intense}{\textbf{---------------------------------------------------------------------------}}
+\textcolor{ansi-red-intense}{\textbf{ValueError}}                                Traceback (most recent call last)
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-83-9ec1d26767ac>}} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green}{      1} \textcolor{ansi-red-intense}{\textbf{\# Sur train}}
+\textcolor{ansi-green-intense}{\textbf{----> 2}}\textcolor{ansi-yellow-intense}{\textbf{ }}true \textcolor{ansi-yellow-intense}{\textbf{,}} pred \textcolor{ansi-yellow-intense}{\textbf{=}} get\_prediction\textcolor{ansi-yellow-intense}{\textbf{(}}x\_test\textcolor{ansi-yellow-intense}{\textbf{,}}y\_test\textcolor{ansi-yellow-intense}{\textbf{,}}model\textcolor{ansi-yellow-intense}{\textbf{,}}\textcolor{ansi-cyan-intense}{\textbf{340}}\textcolor{ansi-yellow-intense}{\textbf{,}} \textcolor{ansi-green-intense}{\textbf{True}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-80-f71c0f10a7b0>}} in \textcolor{ansi-cyan}{get\_prediction}\textcolor{ansi-blue-intense}{\textbf{(xtest, ytest, model, n\_days, plot)}}
+\textcolor{ansi-green}{     25}         plt\textcolor{ansi-yellow-intense}{\textbf{.}}legend\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     26}         plt\textcolor{ansi-yellow-intense}{\textbf{.}}show\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green-intense}{\textbf{---> 27}}\textcolor{ansi-yellow-intense}{\textbf{         }}print\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-blue-intense}{\textbf{"nRMSE : "}} \textcolor{ansi-yellow-intense}{\textbf{,}} nRMSE\_P\textcolor{ansi-yellow-intense}{\textbf{(}}y\_true\textcolor{ansi-yellow-intense}{\textbf{,}} y\_pred\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-cyan-intense}{\textbf{0}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     28}     \textcolor{ansi-green-intense}{\textbf{return}} y\_true\textcolor{ansi-yellow-intense}{\textbf{,}} y\_pred
+
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-79-4bd32d7c1de3>}} in \textcolor{ansi-cyan}{nRMSE\_P}\textcolor{ansi-blue-intense}{\textbf{(y\_true, y\_pred)}}
+\textcolor{ansi-green}{      1} \textcolor{ansi-green-intense}{\textbf{def}} nRMSE\_P\textcolor{ansi-yellow-intense}{\textbf{(}}y\_true\textcolor{ansi-yellow-intense}{\textbf{,}} y\_pred\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{----> 2}}\textcolor{ansi-yellow-intense}{\textbf{     }}\textcolor{ansi-green-intense}{\textbf{return}} np\textcolor{ansi-yellow-intense}{\textbf{.}}sqrt\textcolor{ansi-yellow-intense}{\textbf{(}}np\textcolor{ansi-yellow-intense}{\textbf{.}}mean\textcolor{ansi-yellow-intense}{\textbf{(}}np\textcolor{ansi-yellow-intense}{\textbf{.}}square\textcolor{ansi-yellow-intense}{\textbf{(}}y\_pred \textcolor{ansi-yellow-intense}{\textbf{-}} y\_true\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{/}}np\textcolor{ansi-yellow-intense}{\textbf{.}}mean\textcolor{ansi-yellow-intense}{\textbf{(}}y\_true\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}ops\textbackslash{}common.py}} in \textcolor{ansi-cyan}{new\_method}\textcolor{ansi-blue-intense}{\textbf{(self, other)}}
+\textcolor{ansi-green}{     63}         other \textcolor{ansi-yellow-intense}{\textbf{=}} item\_from\_zerodim\textcolor{ansi-yellow-intense}{\textbf{(}}other\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     64} 
+\textcolor{ansi-green-intense}{\textbf{---> 65}}\textcolor{ansi-yellow-intense}{\textbf{         }}\textcolor{ansi-green-intense}{\textbf{return}} method\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{,}} other\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     66} 
+\textcolor{ansi-green}{     67}     \textcolor{ansi-green-intense}{\textbf{return}} new\_method
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}ops\textbackslash{}\_\_init\_\_.py}} in \textcolor{ansi-cyan}{wrapper}\textcolor{ansi-blue-intense}{\textbf{(left, right)}}
+\textcolor{ansi-green}{    341}         lvalues \textcolor{ansi-yellow-intense}{\textbf{=}} extract\_array\textcolor{ansi-yellow-intense}{\textbf{(}}left\textcolor{ansi-yellow-intense}{\textbf{,}} extract\_numpy\textcolor{ansi-yellow-intense}{\textbf{=}}\textcolor{ansi-green-intense}{\textbf{True}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    342}         rvalues \textcolor{ansi-yellow-intense}{\textbf{=}} extract\_array\textcolor{ansi-yellow-intense}{\textbf{(}}right\textcolor{ansi-yellow-intense}{\textbf{,}} extract\_numpy\textcolor{ansi-yellow-intense}{\textbf{=}}\textcolor{ansi-green-intense}{\textbf{True}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green-intense}{\textbf{--> 343}}\textcolor{ansi-yellow-intense}{\textbf{         }}result \textcolor{ansi-yellow-intense}{\textbf{=}} arithmetic\_op\textcolor{ansi-yellow-intense}{\textbf{(}}lvalues\textcolor{ansi-yellow-intense}{\textbf{,}} rvalues\textcolor{ansi-yellow-intense}{\textbf{,}} op\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    344} 
+\textcolor{ansi-green}{    345}         \textcolor{ansi-green-intense}{\textbf{return}} left\textcolor{ansi-yellow-intense}{\textbf{.}}\_construct\_result\textcolor{ansi-yellow-intense}{\textbf{(}}result\textcolor{ansi-yellow-intense}{\textbf{,}} name\textcolor{ansi-yellow-intense}{\textbf{=}}res\_name\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}ops\textbackslash{}array\_ops.py}} in \textcolor{ansi-cyan}{arithmetic\_op}\textcolor{ansi-blue-intense}{\textbf{(left, right, op)}}
+\textcolor{ansi-green}{    188}     \textcolor{ansi-green-intense}{\textbf{else}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{    189}         \textcolor{ansi-green-intense}{\textbf{with}} np\textcolor{ansi-yellow-intense}{\textbf{.}}errstate\textcolor{ansi-yellow-intense}{\textbf{(}}all\textcolor{ansi-yellow-intense}{\textbf{=}}\textcolor{ansi-blue-intense}{\textbf{"ignore"}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 190}}\textcolor{ansi-yellow-intense}{\textbf{             }}res\_values \textcolor{ansi-yellow-intense}{\textbf{=}} na\_arithmetic\_op\textcolor{ansi-yellow-intense}{\textbf{(}}lvalues\textcolor{ansi-yellow-intense}{\textbf{,}} rvalues\textcolor{ansi-yellow-intense}{\textbf{,}} op\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    191} 
+\textcolor{ansi-green}{    192}     \textcolor{ansi-green-intense}{\textbf{return}} res\_values
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}ops\textbackslash{}array\_ops.py}} in \textcolor{ansi-cyan}{na\_arithmetic\_op}\textcolor{ansi-blue-intense}{\textbf{(left, right, op, is\_cmp)}}
+\textcolor{ansi-green}{    141} 
+\textcolor{ansi-green}{    142}     \textcolor{ansi-green-intense}{\textbf{try}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 143}}\textcolor{ansi-yellow-intense}{\textbf{         }}result \textcolor{ansi-yellow-intense}{\textbf{=}} expressions\textcolor{ansi-yellow-intense}{\textbf{.}}evaluate\textcolor{ansi-yellow-intense}{\textbf{(}}op\textcolor{ansi-yellow-intense}{\textbf{,}} left\textcolor{ansi-yellow-intense}{\textbf{,}} right\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    144}     \textcolor{ansi-green-intense}{\textbf{except}} TypeError\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{    145}         \textcolor{ansi-green-intense}{\textbf{if}} is\_cmp\textcolor{ansi-yellow-intense}{\textbf{:}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}computation\textbackslash{}expressions.py}} in \textcolor{ansi-cyan}{evaluate}\textcolor{ansi-blue-intense}{\textbf{(op, a, b, use\_numexpr)}}
+\textcolor{ansi-green}{    231}         use\_numexpr \textcolor{ansi-yellow-intense}{\textbf{=}} use\_numexpr \textcolor{ansi-green-intense}{\textbf{and}} \_bool\_arith\_check\textcolor{ansi-yellow-intense}{\textbf{(}}op\_str\textcolor{ansi-yellow-intense}{\textbf{,}} a\textcolor{ansi-yellow-intense}{\textbf{,}} b\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    232}         \textcolor{ansi-green-intense}{\textbf{if}} use\_numexpr\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 233}}\textcolor{ansi-yellow-intense}{\textbf{             }}\textcolor{ansi-green-intense}{\textbf{return}} \_evaluate\textcolor{ansi-yellow-intense}{\textbf{(}}op\textcolor{ansi-yellow-intense}{\textbf{,}} op\_str\textcolor{ansi-yellow-intense}{\textbf{,}} a\textcolor{ansi-yellow-intense}{\textbf{,}} b\textcolor{ansi-yellow-intense}{\textbf{)}}  \textcolor{ansi-red-intense}{\textbf{\# type: ignore}}
+\textcolor{ansi-green}{    234}     \textcolor{ansi-green-intense}{\textbf{return}} \_evaluate\_standard\textcolor{ansi-yellow-intense}{\textbf{(}}op\textcolor{ansi-yellow-intense}{\textbf{,}} op\_str\textcolor{ansi-yellow-intense}{\textbf{,}} a\textcolor{ansi-yellow-intense}{\textbf{,}} b\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    235} 
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}computation\textbackslash{}expressions.py}} in \textcolor{ansi-cyan}{\_evaluate\_numexpr}\textcolor{ansi-blue-intense}{\textbf{(op, op\_str, a, b)}}
+\textcolor{ansi-green}{    117} 
+\textcolor{ansi-green}{    118}     \textcolor{ansi-green-intense}{\textbf{if}} result \textcolor{ansi-green-intense}{\textbf{is}} \textcolor{ansi-green-intense}{\textbf{None}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 119}}\textcolor{ansi-yellow-intense}{\textbf{         }}result \textcolor{ansi-yellow-intense}{\textbf{=}} \_evaluate\_standard\textcolor{ansi-yellow-intense}{\textbf{(}}op\textcolor{ansi-yellow-intense}{\textbf{,}} op\_str\textcolor{ansi-yellow-intense}{\textbf{,}} a\textcolor{ansi-yellow-intense}{\textbf{,}} b\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    120} 
+\textcolor{ansi-green}{    121}     \textcolor{ansi-green-intense}{\textbf{return}} result
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}computation\textbackslash{}expressions.py}} in \textcolor{ansi-cyan}{\_evaluate\_standard}\textcolor{ansi-blue-intense}{\textbf{(op, op\_str, a, b)}}
+\textcolor{ansi-green}{     66}         \_store\_test\_result\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-green-intense}{\textbf{False}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     67}     \textcolor{ansi-green-intense}{\textbf{with}} np\textcolor{ansi-yellow-intense}{\textbf{.}}errstate\textcolor{ansi-yellow-intense}{\textbf{(}}all\textcolor{ansi-yellow-intense}{\textbf{=}}\textcolor{ansi-blue-intense}{\textbf{"ignore"}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{---> 68}}\textcolor{ansi-yellow-intense}{\textbf{         }}\textcolor{ansi-green-intense}{\textbf{return}} op\textcolor{ansi-yellow-intense}{\textbf{(}}a\textcolor{ansi-yellow-intense}{\textbf{,}} b\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     69} 
+\textcolor{ansi-green}{     70} 
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}ops\textbackslash{}roperator.py}} in \textcolor{ansi-cyan}{rsub}\textcolor{ansi-blue-intense}{\textbf{(left, right)}}
+\textcolor{ansi-green}{     11} 
+\textcolor{ansi-green}{     12} \textcolor{ansi-green-intense}{\textbf{def}} rsub\textcolor{ansi-yellow-intense}{\textbf{(}}left\textcolor{ansi-yellow-intense}{\textbf{,}} right\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{---> 13}}\textcolor{ansi-yellow-intense}{\textbf{     }}\textcolor{ansi-green-intense}{\textbf{return}} right \textcolor{ansi-yellow-intense}{\textbf{-}} left
+\textcolor{ansi-green}{     14} 
+\textcolor{ansi-green}{     15} 
+
+\textcolor{ansi-red-intense}{\textbf{ValueError}}: operands could not be broadcast together with shapes (356,) (352,) 
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{84}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Low\PYZus{}froude}\PY{p}{(}\PY{n}{river}\PY{p}{,}\PY{n}{pred}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Pred =\PYZgt{} si True calcule du Low\PYZhy{}froude sur Qpred sinon sur Qtrue}
+    \PY{n}{A0r} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{dArp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{k}{if} \PY{n}{pred}\PY{p}{:} 
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{oui}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{Qrp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Qp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{k}{else}\PY{p}{:} 
+        \PY{n}{Qrp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Srp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wrp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{W}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Zrp} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{height}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Zr0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{Zrp}\PY{p}{)}
+    \PY{n}{Wr0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{Wrp}\PY{p}{)}
+    \PY{n}{c1rp} \PY{o}{=} \PY{n}{Wrp}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{2.}\PY{o}{/}\PY{l+m+mf}{5.}\PY{p}{)} \PY{o}{*} \PY{n}{Srp}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{3.}\PY{o}{/}\PY{l+m+mf}{10.}\PY{p}{)}
+    \PY{n}{c2rp} \PY{o}{=} \PY{n}{c1rp} \PY{o}{*} \PY{n}{dArp}
+    \PY{n}{c3rp} \PY{o}{=} \PY{p}{(}\PY{n}{Zrp} \PY{o}{\PYZhy{}} \PY{n}{Zr0}\PY{p}{)}
+    \PY{n}{c4r} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{/} \PY{n}{Wr0}
+
+    \PY{n}{alpha} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{alpha}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{beta} \PY{o}{=} \PY{n}{river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{beta}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    
+    \PY{n}{Qest} \PY{o}{=} \PY{p}{(}\PY{n}{alpha}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{3.}\PY{o}{/}\PY{l+m+mf}{5.}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{c1rp} \PY{o}{*} \PY{n}{A0r} \PY{o}{+} \PY{n}{c2rp}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{c4r} \PY{o}{*} \PY{n}{A0r} \PY{o}{+} \PY{n}{c3rp}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{3.}\PY{o}{/}\PY{l+m+mf}{5.} \PY{o}{*} \PY{n}{beta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{5.}\PY{o}{/}\PY{l+m+mf}{3.}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{Qest}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Qtrue}\PY{p}{,} \PY{n}{Qpredict} \PY{o}{=}\PY{n}{get\PYZus{}prediction}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{,}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{model}\PY{p}{,}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Qp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Qpredict}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}
+\PY{n}{Q\PYZus{}LF} \PY{o}{=} \PY{n}{Low\PYZus{}froude}\PY{p}{(}\PY{n}{data\PYZus{}river}\PY{p}{,}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red-intense}{\textbf{---------------------------------------------------------------------------}}
+\textcolor{ansi-red-intense}{\textbf{InvalidArgumentError}}                      Traceback (most recent call last)
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-85-6029cbd966c1>}} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green-intense}{\textbf{----> 1}}\textcolor{ansi-yellow-intense}{\textbf{ }}Qtrue\textcolor{ansi-yellow-intense}{\textbf{,}} Qpredict \textcolor{ansi-yellow-intense}{\textbf{=}}get\_prediction\textcolor{ansi-yellow-intense}{\textbf{(}}x\_test\textcolor{ansi-yellow-intense}{\textbf{,}}y\_test\textcolor{ansi-yellow-intense}{\textbf{,}}model\textcolor{ansi-yellow-intense}{\textbf{,}}data\_river\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Q"}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{.}}shape\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-cyan-intense}{\textbf{0}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{      2} data\_river\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Qp"}}\textcolor{ansi-yellow-intense}{\textbf{]}} \textcolor{ansi-yellow-intense}{\textbf{=}} Qpredict\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-yellow-intense}{\textbf{:}}\textcolor{ansi-yellow-intense}{\textbf{-}}sequence\_len\textcolor{ansi-yellow-intense}{\textbf{]}}
+\textcolor{ansi-green}{      3} Q\_LF \textcolor{ansi-yellow-intense}{\textbf{=}} Low\_froude\textcolor{ansi-yellow-intense}{\textbf{(}}data\_river\textcolor{ansi-yellow-intense}{\textbf{,}}\textcolor{ansi-green-intense}{\textbf{True}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-80-f71c0f10a7b0>}} in \textcolor{ansi-cyan}{get\_prediction}\textcolor{ansi-blue-intense}{\textbf{(xtest, ytest, model, n\_days, plot)}}
+\textcolor{ansi-green}{     13}     \textcolor{ansi-green-intense}{\textbf{for}} i \textcolor{ansi-green-intense}{\textbf{in}} range\textcolor{ansi-yellow-intense}{\textbf{(}}n\_days\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{     14}         x\_sequence \textcolor{ansi-yellow-intense}{\textbf{=}} xtest\textcolor{ansi-yellow-intense}{\textbf{[}}s\textcolor{ansi-yellow-intense}{\textbf{+}}i\textcolor{ansi-yellow-intense}{\textbf{:}}s\textcolor{ansi-yellow-intense}{\textbf{+}}sequence\_len\textcolor{ansi-yellow-intense}{\textbf{+}}i\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{.}}copy\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green-intense}{\textbf{---> 15}}\textcolor{ansi-yellow-intense}{\textbf{         }}aux\_pred \textcolor{ansi-yellow-intense}{\textbf{=}} model\textcolor{ansi-yellow-intense}{\textbf{.}}predict\textcolor{ansi-yellow-intense}{\textbf{(}} np\textcolor{ansi-yellow-intense}{\textbf{.}}array\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{[}}x\_sequence\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     16}         y\_pred\textcolor{ansi-yellow-intense}{\textbf{.}}append\textcolor{ansi-yellow-intense}{\textbf{(}}aux\_pred\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-cyan-intense}{\textbf{0}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{     17} 
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}keras\textbackslash{}engine\textbackslash{}training.py}} in \textcolor{ansi-cyan}{predict}\textcolor{ansi-blue-intense}{\textbf{(self, x, batch\_size, verbose, steps, callbacks, max\_queue\_size, workers, use\_multiprocessing)}}
+\textcolor{ansi-green}{   1627}           \textcolor{ansi-green-intense}{\textbf{for}} step \textcolor{ansi-green-intense}{\textbf{in}} data\_handler\textcolor{ansi-yellow-intense}{\textbf{.}}steps\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{   1628}             callbacks\textcolor{ansi-yellow-intense}{\textbf{.}}on\_predict\_batch\_begin\textcolor{ansi-yellow-intense}{\textbf{(}}step\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green-intense}{\textbf{-> 1629}}\textcolor{ansi-yellow-intense}{\textbf{             }}tmp\_batch\_outputs \textcolor{ansi-yellow-intense}{\textbf{=}} self\textcolor{ansi-yellow-intense}{\textbf{.}}predict\_function\textcolor{ansi-yellow-intense}{\textbf{(}}iterator\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{   1630}             \textcolor{ansi-green-intense}{\textbf{if}} data\_handler\textcolor{ansi-yellow-intense}{\textbf{.}}should\_sync\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{   1631}               context\textcolor{ansi-yellow-intense}{\textbf{.}}async\_wait\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}def\_function.py}} in \textcolor{ansi-cyan}{\_\_call\_\_}\textcolor{ansi-blue-intense}{\textbf{(self, *args, **kwds)}}
+\textcolor{ansi-green}{    826}     tracing\_count \textcolor{ansi-yellow-intense}{\textbf{=}} self\textcolor{ansi-yellow-intense}{\textbf{.}}experimental\_get\_tracing\_count\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    827}     \textcolor{ansi-green-intense}{\textbf{with}} trace\textcolor{ansi-yellow-intense}{\textbf{.}}Trace\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{.}}\_name\textcolor{ansi-yellow-intense}{\textbf{)}} \textcolor{ansi-green-intense}{\textbf{as}} tm\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 828}}\textcolor{ansi-yellow-intense}{\textbf{       }}result \textcolor{ansi-yellow-intense}{\textbf{=}} self\textcolor{ansi-yellow-intense}{\textbf{.}}\_call\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{*}}args\textcolor{ansi-yellow-intense}{\textbf{,}} \textcolor{ansi-yellow-intense}{\textbf{**}}kwds\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    829}       compiler \textcolor{ansi-yellow-intense}{\textbf{=}} \textcolor{ansi-blue-intense}{\textbf{"xla"}} \textcolor{ansi-green-intense}{\textbf{if}} self\textcolor{ansi-yellow-intense}{\textbf{.}}\_experimental\_compile \textcolor{ansi-green-intense}{\textbf{else}} \textcolor{ansi-blue-intense}{\textbf{"nonXla"}}
+\textcolor{ansi-green}{    830}       new\_tracing\_count \textcolor{ansi-yellow-intense}{\textbf{=}} self\textcolor{ansi-yellow-intense}{\textbf{.}}experimental\_get\_tracing\_count\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}def\_function.py}} in \textcolor{ansi-cyan}{\_call}\textcolor{ansi-blue-intense}{\textbf{(self, *args, **kwds)}}
+\textcolor{ansi-green}{    860}       \textcolor{ansi-red-intense}{\textbf{\# In this case we have not created variables on the first call. So we can}}
+\textcolor{ansi-green}{    861}       \textcolor{ansi-red-intense}{\textbf{\# run the first trace but we should fail if variables are created.}}
+\textcolor{ansi-green-intense}{\textbf{--> 862}}\textcolor{ansi-yellow-intense}{\textbf{       }}results \textcolor{ansi-yellow-intense}{\textbf{=}} self\textcolor{ansi-yellow-intense}{\textbf{.}}\_stateful\_fn\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{*}}args\textcolor{ansi-yellow-intense}{\textbf{,}} \textcolor{ansi-yellow-intense}{\textbf{**}}kwds\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{    863}       \textcolor{ansi-green-intense}{\textbf{if}} self\textcolor{ansi-yellow-intense}{\textbf{.}}\_created\_variables\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{    864}         raise ValueError("Creating variables on a non-first call to a function"
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}function.py}} in \textcolor{ansi-cyan}{\_\_call\_\_}\textcolor{ansi-blue-intense}{\textbf{(self, *args, **kwargs)}}
+\textcolor{ansi-green}{   2940}       (graph\_function,
+\textcolor{ansi-green}{   2941}        filtered\_flat\_args) = self.\_maybe\_define\_function(args, kwargs)
+\textcolor{ansi-green-intense}{\textbf{-> 2942}}\textcolor{ansi-yellow-intense}{\textbf{     return graph\_function.\_call\_flat(
+}}\textcolor{ansi-green}{   2943}         filtered\_flat\_args, captured\_inputs=graph\_function.captured\_inputs)  \# pylint: disable=protected-access
+\textcolor{ansi-green}{   2944} 
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}function.py}} in \textcolor{ansi-cyan}{\_call\_flat}\textcolor{ansi-blue-intense}{\textbf{(self, args, captured\_inputs, cancellation\_manager)}}
+\textcolor{ansi-green}{   1916}         and executing\_eagerly):
+\textcolor{ansi-green}{   1917}       \textcolor{ansi-red-intense}{\textbf{\# No tape is watching; skip to running the function.}}
+\textcolor{ansi-green-intense}{\textbf{-> 1918}}\textcolor{ansi-yellow-intense}{\textbf{       return self.\_build\_call\_outputs(self.\_inference\_function.call(
+}}\textcolor{ansi-green}{   1919}           ctx, args, cancellation\_manager=cancellation\_manager))
+\textcolor{ansi-green}{   1920}     forward\_backward = self.\_select\_forward\_and\_backward\_functions(
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}function.py}} in \textcolor{ansi-cyan}{call}\textcolor{ansi-blue-intense}{\textbf{(self, ctx, args, cancellation\_manager)}}
+\textcolor{ansi-green}{    553}       \textcolor{ansi-green-intense}{\textbf{with}} \_InterpolateFunctionError\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{    554}         \textcolor{ansi-green-intense}{\textbf{if}} cancellation\_manager \textcolor{ansi-green-intense}{\textbf{is}} \textcolor{ansi-green-intense}{\textbf{None}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green-intense}{\textbf{--> 555}}\textcolor{ansi-yellow-intense}{\textbf{           outputs = execute.execute(
+}}\textcolor{ansi-green}{    556}               str\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{.}}signature\textcolor{ansi-yellow-intense}{\textbf{.}}name\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{,}}
+\textcolor{ansi-green}{    557}               num\_outputs\textcolor{ansi-yellow-intense}{\textbf{=}}self\textcolor{ansi-yellow-intense}{\textbf{.}}\_num\_outputs\textcolor{ansi-yellow-intense}{\textbf{,}}
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}tensorflow\textbackslash{}python\textbackslash{}eager\textbackslash{}execute.py}} in \textcolor{ansi-cyan}{quick\_execute}\textcolor{ansi-blue-intense}{\textbf{(op\_name, num\_outputs, inputs, attrs, ctx, name)}}
+\textcolor{ansi-green}{     57}   \textcolor{ansi-green-intense}{\textbf{try}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{     58}     ctx\textcolor{ansi-yellow-intense}{\textbf{.}}ensure\_initialized\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green-intense}{\textbf{---> 59}}\textcolor{ansi-yellow-intense}{\textbf{     tensors = pywrap\_tfe.TFE\_Py\_Execute(ctx.\_handle, device\_name, op\_name,
+}}\textcolor{ansi-green}{     60}                                         inputs, attrs, num\_outputs)
+\textcolor{ansi-green}{     61}   \textcolor{ansi-green-intense}{\textbf{except}} core\textcolor{ansi-yellow-intense}{\textbf{.}}\_NotOkStatusException \textcolor{ansi-green-intense}{\textbf{as}} e\textcolor{ansi-yellow-intense}{\textbf{:}}
+
+\textcolor{ansi-red-intense}{\textbf{InvalidArgumentError}}:  Tried to stack elements of an empty list with non-fully-defined element\_shape: [?,10]
+	 [[node sequential\_1/lstm\_1/TensorArrayV2Stack/TensorListStack (defined at <ipython-input-80-f71c0f10a7b0>:15) ]] [Op:\_\_inference\_predict\_function\_114416]
+
+Function call stack:
+predict\_function
+
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{Qpredict}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prediction}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{orange}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s} \PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{p}{,}\PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Low Froude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{,}\PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Target}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy}\PY{n+nn}{.}\PY{n+nn}{linalg} \PY{k}{as} \PY{n+nn}{npl}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{npl}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{shape}\PY{p}{(}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}list}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{type}\PY{p}{(}\PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{subtract}\PY{p}{(}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{npl}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{subtract}\PY{p}{(}\PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{p}{,}\PY{n}{Qpredict}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nRMSE\PYZus{}P}\PY{p}{(}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{,} \PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nRMSE\PYZus{}P}\PY{p}{(}\PY{n}{Qpredict}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{,}\PY{n}{Qtrue}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nRMSE\PYZus{}P}\PY{p}{(}\PY{n}{Qpredict}\PY{p}{[}\PY{p}{:}\PY{n}{data\PYZus{}river}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Q}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{sequence\PYZus{}len}\PY{p}{]}\PY{p}{,} \PY{n}{Q\PYZus{}LF}\PY{p}{[}\PY{n}{sequence\PYZus{}len}\PY{p}{:}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Low froude ne fit pas exactement car on calcule sur 368 données,
+surement qu'on enleve les minima de Wrp et Z
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

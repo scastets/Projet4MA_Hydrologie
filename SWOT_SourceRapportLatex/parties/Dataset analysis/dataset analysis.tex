@@ -1,0 +1,65 @@
+\section{Dataset analysis}
+
+\subsection{Dataset presentation and modifications}
+
+\subsubsection{Dataset presentation.}
+
+We focus on two datasets. The first one is PEPSI, a compilation of synthetic flow observations generated from outputs of various hydraulic flow models. This dataset is composed of 55525 observations from 29 rivers worldwide, with 21 explanatory variables for each of them. The second dataset, HydroSwot is generated from observations -- from 153 rivers -- taken in-situ in North America. It contains 16638 observations with 41 explanatory variables. Table \ref{tab:varaibles} describes the explanatory variables contained in both datasets, and that we use for the statistic analysis.
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        Variable & Description & HydroSwot & PEPSI  \\ \hline \hline
+        river &  river name & X & X \\ \hline
+        site\_no & site number & X & \\ \hline
+        day & simulation day & & X \\ \hline
+        reach & reach index & &X \\ \hline
+        reach\_length & length of the reach & & X \\ \hline 
+        flowacc & flow accumulation, i.e. size of the upstream watershed & X & X \\ \hline
+        height & free surface height & X & X \\ \hline 
+        dH & water depth above unobserved flow & X & \\ \hline
+        W &  free surface top width & X & X \\ \hline
+        S & free surface slope  &  & X \\ \hline
+        Sdem & terrain slope & X & \\ \hline
+        K & Strickler value & & X \\ \hline
+        Fr & Froude number & & X \\ \hline
+        \alpha, \beta & Manning-Strickler coefficients & & X \\ \hline 
+        A & cross-section flow area & & X \\ \hline 
+        dA & cross-sectional flow area above A0 & X & X \\ \hline
+        A0 & unobserved cross-sectional flow area & X & X\\ \hline
+        Abar & mean cross-sectional flow area  data & X & X\\ \hline
+        Amed & median cross-sectional flow area  data & X & \\ \hline
+        U & flow velocity & X & X\\ \hline
+        Q & discharge & X & X \\ \hline
+        PA & mean annual precipitation & X & \\ \hline
+        TA & mean annual temperature & X & \\ \hline
+        sinuosity & sinuosity & & X \\ \hline 
+        meandwave & meandering wavelenght & & X \\ \hline 
+        Sand, salt, ... & floor composition & X &X \\ \hline 
+        lon, lat & localisation & X & X \\ \hline 
+        LC1, LC2, ... & vegetation information & X & \\ \hline 
+        
+    \end{tabular}
+    \caption{Explanatory variables of HydroSwot and PEPSI datasets}
+    \label{tab:varaibles}
+\end{table}
+\underline{Remark:} the values of the river discharge $Q$ have an uncertainty of 20\%. 
+
+
+\subsubsection{Dataset modifications.\label{section212}}
+
+First, we clean our datasets. We delete all observations with $NaN$ values, i.e. missing values. In the HydroSwot dataset, we can find different names for the same river because of text processing when creating the data. We update the names to have each river with a single name and make easier the analysis. We obtain 134 rivers.
+
+The satellite does not detect small rivers with a width less than $80m$. Thus, we delete observations with a width under $80m$. We also remove observations with a river discharge under $100 m^3/s$ because we assume they are too precise observations, and so they do not have a real meaning.
+
+We remove the calculations of base streamflow, and the different mean discharge quantile from the HydroSwot dataset. We also remove the flow velocity $U$ in the two datasets, because $U$ is linearly linked to $Q$ according to the following equation : $Q = AU$.\newline
+
+Finally, we obtain a dataset with 29 rivers, 51269 observations, and 20 variables for PEPSI, and a dataset with 134 rivers, 11851 observations, and 21 variables for HydroSwot.
+        
+Due to previous modifications, we obtain only 1 observation for 8 sites in the HydroSwot dataset. We cannot use these data because the variables $dA$ and $dH$ are calculated by differences, so we must have at least 2 observations to give them meaning. Hence, we remove these 8 observations. To conclude, we lose 29\% of data in the HydroSwot dataset and 8\% in the PEPSI dataset.
+
+\input{parties/Dataset analysis/methods_stat}
+
+\input{parties/Dataset analysis/results_stat}

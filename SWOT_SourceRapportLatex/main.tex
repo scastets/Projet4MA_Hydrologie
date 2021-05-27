@@ -1,0 +1,50 @@
+
+\documentclass[a4paper,11pt,twosideX,onefignum,onetabnum]{siamart190516}
+
+
+\externaldocument{ex_article}
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,amssymb,float}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lscape}
+\usepackage{boldline,multirow,tabularx,colortbl,diagbox,makecell,fancybox}
+\usepackage{pdfpages}
+\usepackage{amsfonts,amssymb,amsmath,mathrsfs,array}
+\usepackage{pgf,tikz,xcolor}
+\usetikzlibrary{calc,positioning,shapes.geometric,shapes.symbols,shapes.misc, fit, shapes, arrows, arrows.meta,fadings,through}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{eurosym}
+\usepackage[english]{babel}
+\usepackage{graphicx,subcaption}
+\usepackage{adjustbox}
+\renewcommand{\thefootnote}{(\texttt{\tiny\arabic{footnote}})}
+
+
+
+
+\begin{document}
+\title{Estimating river discharge by learning processes in spatial hydrology}
+\author{Sébastien Castets\thanks{student at INSA Toulouse, sbcastets@gmail.com}\and Quentin Douzery \thanks{student at INSA Toulouse, qdouzery@free.fr }\and Elisa Escanez \thanks{student at INSA Toulouse, elisa.escanez@g-mail.fr} }
+%\thanks{, , }
+
+
+\maketitle
+\input{parties/abstract}
+\input{parties/contexte}
+\newpage
+\input{parties/Dataset analysis/dataset analysis}
+\input{parties/NN setup}
+\input{parties/numerical analysis discussion/Discussion and analysis}
+\newpage
+
+\bibliographystyle{siamplain}
+\bibliography{bibtex}
+
+% % \includepdf[pages=-]{pdf_lstm.pdf}
+% \section{Annex}
+% \includepdf[scale=0.7,pages=1, pagecommand=\section{Annex}]{pdf_lstm.pdf}
+% \includepdf[scale=1,pages=2-]{pdf_lstm.pdf}
+\end{document}

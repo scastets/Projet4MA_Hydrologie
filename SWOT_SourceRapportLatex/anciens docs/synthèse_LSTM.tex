@@ -1,0 +1,58 @@
+\section{Introduction aux LSTM}
+
+\begin{itemize}
+    \item présentation neural networks
+    \item présentation recurrent neural networks
+    \item explosion de gradient 
+    \item LSTM \\
+\end{itemize}
+
+
+02 février\\
+
+Modélisation numérique, directe et inverse, des écoulements de fleuves & rivières dont la surface est mesurée par satellite. L'objectif est d’estimer le débit des rivières (m3/s) à l'échelle planétaire à partir des seules observations altimétriques (hauteur et largeur de la surface d'eau).\newline
+
+Bases de données :\newline
+-	HYDRoSWOT\\
+-	PEPSI\\
+
+Variables d’intérêt pour l’explication de la variabilité du débit des rivières :\\
+-	L’aire drainée\\
+-	Les aires ajoutées\\
+-	La largeur\\
+-	Le taux de limon\\
+-	Sinuosity & Meandwave\\
+
+Réseaux de neurones :\\
+-	Vecteur de poids associé à chaque neurone\\
+-	Couche : ensemble de neurones n’ayant pas de connexions entre eux\\
+-	Perceptron : un neurone d’une couche cachée est connecté en entrée à chacun des neurones de la couche précédente et en sortie à chaque neurone de la couche suivante.\\
+-	Estimation des poids par apprentissage (utilisation d’algorithmes d’optimisation)\\
+-	Choix des paramètres : nombre de couches cachées, nombre de neurones par couche cachée, nombre maximum d’itérations, erreur maximale tolérée, terme de régularisation, taux d’apprentissage, taille des ensembles d’observations\\
+-	Difficile de se faire une idée de la qualité du modèle\\
+-	Fixer le nombre de neurones et d’itérations assez grand, et jouer sur le réglage de la pénalisation\\
+-	Librairie e1071\\
+
+Deep learning :\\
+-	ConvNet > analyse d’image\\
+-	LSTM > dimension temporelle à prendre en compte\\
+-	Diabolo > détection d’anomalies\\
+-	Empilement de couches de neurones\\
+
+Problème initial\\
+Bathymétrie, débit, frictions\\
+->	Débit, section mouillée (A0 inconnue)\\
+
+Problème inverse\\
+Modèles physiques (équations de mouvement et de la masse) , largeur d’eau, aire drainée, hauteur d’eau (pas A0)\\
+->	Débit, section mouillée\\
+
+Réseaux de neurones\\
+-	Architecture donne le modèle\\
+-	Sortie comparée avec la base de données GRDC (minimisation en modifiant les poids des neurones)\\
+-	LSTM permet la corrélation temporelle\\
+
+Deux bases de données : 1 est grande mais avec des données « fausses », 1 est petite mais avec des « vraies » données.\\
+
+
+https://datasciencetoday.net/index.php/fr/machine-learning/148-reseaux-neuronaux-recurrents-et-lstm#:~:text=Les%20r%C3%A9seaux%20de%20longue%20m%C3%A9moire%20%C3%A0%20court%20terme,ont%20des%20retards%20tr%C3%A8s%20longs%20entre%20les%20deux.
